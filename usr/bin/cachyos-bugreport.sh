@@ -116,7 +116,7 @@ redact() {
     local hn
     hn=$(hostname)
     if [[ $hn != "cachyos" ]]; then
-        sed_args+=(-e "s|$(sed_escape "$hn")|<hostname-redacted>|g")
+        sed_args+=(-e "s|\b$(sed_escape "$hn")\b|<hostname-redacted>|g")
     fi
 
     # Redact real username and home directory (SUDO_USER is set when run via sudo)
@@ -124,8 +124,8 @@ redact() {
     if [ -n "$real_user" ] && [ "$real_user" != "root" ]; then
         local escaped_user
         escaped_user=$(sed_escape "$real_user")
-        sed_args+=(-e "s|/home/${escaped_user}|<home-dir-redacted>|g")
-        sed_args+=(-e "s|${escaped_user}|<username-redacted>|g")
+        sed_args+=(-e "s|/home/${escaped_user}\b|<home-dir-redacted>|g")
+        sed_args+=(-e "s|\b${escaped_user}\b|<username-redacted>|g")
     fi
 
     # Redact SSIDs
